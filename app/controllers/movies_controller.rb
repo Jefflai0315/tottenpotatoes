@@ -1,4 +1,5 @@
 class MoviesController < ApplicationController
+  @ratings_to_show_hash = []
 
   def show
     id = params[:id] # retrieve movie ID from URI route
@@ -7,7 +8,23 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    @ratings_to_show_hash = []
+    #update sessionstate
+    
+    if (params[:ratings] == nil && session[:ratings] != nil)
+      
+     flash.keep
+     redirect_to movies_path(ratings: session[:ratings] || params[:ratings])
+   end
+   session[:ratings] = params[:ratings]
+   @ratings_to_show_hash = session[:ratings].keys
+    
+
+    @all_ratings = ['G','PG','PG-13','R']
+    ratings = params[:ratings] != nil ? params[:ratings].keys : @all_ratings
+    @movies = Movie.where(rating: ratings)
+    
+
   end
 
   def new
@@ -44,4 +61,12 @@ class MoviesController < ApplicationController
   def movie_params
     params.require(:movie).permit(:title, :rating, :description, :release_date)
   end
+
+  # def 
+  #   rating = params[:rating]
+  #   if @ratings_to_show_hash.include?(rating)
+  #     #remove rating
+  #   else
+  #     @ratings_to_show_hash.append(rating)
+  #   end
 end
