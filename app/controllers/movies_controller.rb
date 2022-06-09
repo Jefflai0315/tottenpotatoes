@@ -16,7 +16,6 @@ class MoviesController < ApplicationController
       session[:sorted] = nil
     end
 
-    @all_ratings = ['G','PG','PG-13','R']
 
     #did not pressed refresh and pressed sort
     if params[:sorted] != nil && params[:ratings] == nil
@@ -27,8 +26,13 @@ class MoviesController < ApplicationController
       session[:ratings] = params[:ratings] 
     end
 
+    #if user unchecked all ratings
+    if params[:sorted] == nil && params[:ratings] == nil && params[:home] == '1'
+      session[:ratings] = params[:ratings] 
+    end
 
 
+    @all_ratings = ['G','PG','PG-13','R']
     ratings = session[:ratings] != nil ? session[:ratings].keys : []
     
     @ratings_to_show_hash = ratings
