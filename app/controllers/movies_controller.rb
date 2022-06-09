@@ -8,21 +8,38 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @ratings_to_show_hash = []
+    
     #update sessionstate
-    
-    if (params[:ratings] == nil && session[:ratings] != nil)
-      
-     flash.keep
-     redirect_to movies_path(ratings: session[:ratings] || params[:ratings])
-   end
-   session[:ratings] = params[:ratings]
-   @ratings_to_show_hash = session[:ratings].keys
-    
 
+    #it param is selected update session and ratings to show 
+
+    #if param is not selected and session is not empty, go to session
+    
+    # init param is nil and session is false
+    # all movie 
+    
+    #param and session same => redirect to same page 
+
+    #if param and session diff => update session 
+
+    
+    if (params[:ratings] == nil && session[:ratings] == nil)
+      redirect_to movies_path(ratings: Hash[])
+    end
+
+    if (params[:ratings]!= session[:ratings])
+      session[:ratings] = params[:ratings]
+    end
+
+    # if (params[:ratings] == nil && session[:ratings] != nil)
+    #  redirect_to movies_path(ratings: session[:ratings])
+    # end
+
+    # session[:ratings] = params[:ratings]
     @all_ratings = ['G','PG','PG-13','R']
-    ratings = params[:ratings] != nil ? params[:ratings].keys : @all_ratings
-    @movies = Movie.where(rating: ratings)
+    ratings = params[:ratings] != nil ? params[:ratings].keys : []
+    @ratings_to_show_hash = ratings
+    @movies = ratings == [] ? Movie.all : Movie.where(rating: ratings)
     
 
   end
