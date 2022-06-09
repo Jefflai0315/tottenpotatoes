@@ -8,31 +8,26 @@ class MoviesController < ApplicationController
   end
 
   def index
-   #for first time visit
-    # if (params[:ratings] == nil && session[:ratings] == false && params[:sorted] == nil && session[:sorted]== false)
-    #   session[:ratings] = Hash[]
-    #   session[:sorted] = ' '
-    #   redirect_to movies_path(rating: session[:ratings], sorted: session[:sorted])
-    # end
-
+  #init
     if session[:ratings] == false
       session[:ratings] = nil
     end
-
     if session[:sorted] == false
       session[:sorted] = nil
     end
 
-    
-
-    session[:sorted] = params[:sorted]
     @all_ratings = ['G','PG','PG-13','R']
 
+    #did not pressed refresh and pressed sort
     if params[:sorted] != nil && params[:ratings] == nil
-      
-    elsif params[:sorted] == nil && params[:ratings] != nil
+      session[:sorted] = params[:sorted]
+
+    #pressed refresh and did not pressed sort
+    elsif params[:sorted] == nil && params[:ratings] != nil 
       session[:ratings] = params[:ratings] 
     end
+
+
 
     ratings = session[:ratings] != nil ? session[:ratings].keys : []
     
