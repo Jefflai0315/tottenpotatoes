@@ -8,25 +8,47 @@ class MoviesController < ApplicationController
   end
 
   def index
-    
-    
+   #for first time visit
+    # if (params[:ratings] == nil && session[:ratings] == false && params[:sorted] == nil && session[:sorted]== false)
+    #   session[:ratings] = Hash[]
+    #   session[:sorted] = ' '
+    #   redirect_to movies_path(rating: session[:ratings], sorted: session[:sorted])
+    # end
 
-    #for first time visit
-    if (params[:ratings] == nil && session[:ratings] == false)
-      session[:ratings] = Hash[]
-      redirect_to movies_path(ratings: Hash[])
+    if session[:ratings] == false
+      session[:ratings] = nil
     end
 
-    if (params[:ratings]!= session[:ratings])
-      session[:ratings] = params[:ratings]
+    if session[:sorted] == false
+      session[:sorted] = nil
     end
 
+    
+
+    session[:sorted] = params[:sorted]
     @all_ratings = ['G','PG','PG-13','R']
-    ratings = params[:ratings] != nil ? params[:ratings].keys : []
+
+    if params[:sorted] != nil && params[:ratings] == nil
+      
+    elsif params[:sorted] == nil && params[:ratings] != nil
+      session[:ratings] = params[:ratings] 
+    end
+
+    ratings = session[:ratings] != nil ? session[:ratings].keys : []
+    
     @ratings_to_show_hash = ratings
     @movies = ratings == [] ? Movie.all : Movie.where(rating: ratings)
+
+    if session[:sorted] == "title" 
+      @movies = @movies.order("title")
+    elsif session[:sorted] == "release_date" 
+      @movies = @movies.order("release_date")
+    end
     
 
+
+    @session_s = session[:sorted]
+    @session_r = session[:ratings]
   end
 
   def new
