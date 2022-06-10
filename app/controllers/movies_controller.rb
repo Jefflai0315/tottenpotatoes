@@ -33,7 +33,7 @@ class MoviesController < ApplicationController
 
 
     @all_ratings = ['G','PG','PG-13','R']
-    ratings = session[:ratings] != nil ? session[:ratings].keys : []
+    ratings = session[:ratings] != nil ? session[:ratings].keys : @all_ratings
     
     @ratings_to_show_hash = ratings
     @movies = ratings == [] ? Movie.all : Movie.where(rating: ratings)
