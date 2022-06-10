@@ -10,10 +10,10 @@ class MoviesController < ApplicationController
   def index
   #init
     if session[:ratings] == false
-      session[:ratings] = nil
+      session[:ratings] = ' '
     end
     if session[:sorted] == false
-      session[:sorted] = nil
+      session[:sorted] = ' '
     end
 
 
