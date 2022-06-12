@@ -12,22 +12,22 @@ class MoviesController < ApplicationController
     if session[:ratings] == false
       session[:ratings] = ' '
     end
-    if session[:sorted] == false
-      session[:sorted] = ' '
+    if session[:sort_by] == false
+      session[:sort_by] = ' '
     end
 
 
     #did not pressed refresh and pressed sort
-    if params[:sorted] != nil && params[:ratings] != nil
-      session[:sorted] = params[:sorted]
+    if params[:sort_by] != nil && params[:ratings] != nil
+      session[:sort_by] = params[:sort_by]
 
     #pressed refresh and did not pressed sort
-    elsif params[:sorted] == nil && params[:ratings] != nil 
+    elsif params[:sort_by] == nil && params[:ratings] != nil 
       session[:ratings] = params[:ratings] 
     end
 
     #if user unchecked all ratings
-    if params[:sorted] == nil && params[:ratings] == nil && params[:home] == '1'
+    if params[:sort_by] == nil && params[:ratings] == nil && params[:home] == '1'
       session[:ratings] = params[:ratings] 
     end
 
@@ -38,17 +38,17 @@ class MoviesController < ApplicationController
     @ratings_to_show_hash = ratings
     @movies = ratings == [] ? Movie.all : Movie.where(rating: ratings)
 
-    if session[:sorted] == "title" 
+    if session[:sort_by] == "title" 
       @movies = @movies.order("title")
-    elsif session[:sorted] == "release_date" 
+    elsif session[:sort_by] == "release_date" 
       @movies = @movies.order("release_date")
     end
 
 
-    @session_s = session[:sorted]
+    @session_s = session[:sort_by]
     @session_r = session[:ratings]
-    @title_header = (session[:sorted]=='title') ? 'hilite bg-warning' : ''
-    @release_date_header = (session[:sorted]=='release_date') ? 'hilite bg-warning' : ''
+    @title_header = (session[:sort_by]=='title') ? 'hilite bg-warning' : ''
+    @release_date_header = (session[:sort_by]=='release_date') ? 'hilite bg-warning' : ''
   end
 
   def new
