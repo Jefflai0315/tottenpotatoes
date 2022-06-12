@@ -18,7 +18,7 @@ class MoviesController < ApplicationController
 
 
     #did not pressed refresh and pressed sort
-    if params[:sorted] != nil && params[:ratings] == nil
+    if params[:sorted] != nil && params[:ratings] != nil
       session[:sorted] = params[:sorted]
 
     #pressed refresh and did not pressed sort
@@ -43,11 +43,12 @@ class MoviesController < ApplicationController
     elsif session[:sorted] == "release_date" 
       @movies = @movies.order("release_date")
     end
-    
 
 
     @session_s = session[:sorted]
     @session_r = session[:ratings]
+    @title_header = (session[:sorted]=='title') ? 'hilite bg-warning' : ''
+    @release_date_header = (session[:sorted]=='release_date') ? 'hilite bg-warning' : ''
   end
 
   def new
